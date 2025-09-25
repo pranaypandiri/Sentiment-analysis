@@ -27,14 +27,11 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    # Select the predictor to be loaded from Models folder
     predictor = pickle.load(open(r"Models/model_xgb.pkl", "rb"))
     scaler = pickle.load(open(r"Models/scaler.pkl", "rb"))
     cv = pickle.load(open(r"Models/countVectorizer.pkl", "rb"))
     try:
-        # Check if the request contains a file (for bulk prediction) or text input
         if "file" in request.files:
-            # Bulk prediction from CSV file
             file = request.files["file"]
             data = pd.read_csv(file)
 
@@ -56,7 +53,6 @@ def predict():
             return response
 
         elif "text" in request.json:
-            # Single string prediction
             text_input = request.json["text"]
             predicted_sentiment = single_prediction(predictor, scaler, cv, text_input)
 
